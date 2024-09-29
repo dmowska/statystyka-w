@@ -52,6 +52,8 @@ book:
      chapters:
       - 16_zadania_samodzielne.qmd
 
+execute:
+  freeze: auto
 
 bibliography: references.bib
 
@@ -59,9 +61,5 @@ format:
   html:
     theme: yeti
     out-width: 400px
-  pdf:
-    documentclass: scrreprt
-
-editor: visual
 
 number-depth: 3
