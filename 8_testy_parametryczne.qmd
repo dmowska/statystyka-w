@@ -125,6 +125,7 @@ head(pomiary_pol)
 #| message: false
 #| warning: false
 
+#Wykonanie wykresu pudelkowego wymaga zamiany danych na format dlugi
 pomiary_pol_l <- pomiary_pol %>% 
   select(pomiar_id, tmax_4, tmax_9) %>% 
   pivot_longer(contains("tmax"))
@@ -141,11 +142,6 @@ Test t-Studenta dla prób zależnych, jeśli dane są w formacie szerokim.
 t.test(pomiary_pol$tmax_4, pomiary_pol$tmax_9, paired = TRUE, alternative = "greater")
 ```
 
-Test t-Studenta dla prób zależnych, jeśli dane są w formacie długim.
-
-```{r}
-t.test(value ~ name, data = pomiary_pol_l, paired = TRUE)
-```
 
 > Jaka jest interpretacja powyższego wyniku?
 
