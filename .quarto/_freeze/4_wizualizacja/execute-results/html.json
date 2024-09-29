@@ -1,0 +1,16 @@
+{
+  "hash": "54309a29ee587ddeaefe4bd0597db38e",
+  "result": {
+    "markdown": "# Wykresy w R\n\nWizualizacja danych w R: \n\n-   podstawowa grafika np. `plot(x, y)`, `hist(x)`\n-   pakiet `ggplot2`\n\n## Co to jest ggplot2?\n\n-   Pakiet R stworzony przez Hadley Wickham\n-   jest implementacją założeń zawartych w książce “Grammar of Graphics” Lelanda Wilkinsona\n-   oferuje potężny język graficzny do tworzenia eleganckich i złożonych wykresów.\n-   wymagane dane wejściowe to zazwyczaj data.frame\n-   istnieją dwie komendy pozwalające na tworzenie wykresów - `qplot` oraz `ggplot`\n-   pełna dokumentacja znajduje się na stronie - <https://ggplot2.tidyverse.org/> oraz <https://ggplot2-book.org/>\n\n## Co to jest The Grammar Of Graphics ?\n\nPodstawowa idea: niezależnie określić elementy wykresu i połączyć je w celu stworzenia prawie każdego wykresu jaki chcemy.\n\nElementy wykresu obejmują:\n\n-   dane (ang. *data*)\n-   estetycze mapowanie (ang. *aesthetic mapping*)\n-   obiekty geometryczne (ang. *gemetric object*)\n-   skale\n-   układ współrzędnych\n-   faceting\n\n## Elementy wykresów w ggplot2\n\nWykres tworzony za pomocą pakietu ggplot składa się z trzech podstawowych składowoych:\n\n-   **data** - zdefniowanie zbioru danych, który będzie wyświetlany\n-   **aesthetics (aes)** - element, który widzimy (kolor, kształt)\n-   **geom** - symbol wyświetlany na wykresie (np. geom_histogram, geom_boxplot, geom_point)\n-   **facet** - tworzenie wykresów dla podzbiorów danych\n\n### Estetyczne mapowanie (ang. Aesthetic Mapping)\n\n-   Określane używając funkcji aes()\n\n-   W ggplot aesthetic oznacza “coś co widzimy”. Np:\n\n    -   pozycja na osi x oraz y\n    -   kolor\n    -   wypełnienie (wewnętrzny kolor obiektu)\n    -   kształt (dla obiektów punktowych)\n    -   typ linii\n    -   rozmiar\n\nKażdy typ geometrii (punkty, linie itp.) akcpeptuje tylko wybrane elementy (patrz pomoc dla określonych obiektów przestrzennych, np. `?ggplot2::geom_point`)\n\n### Obiekty geometryczne - (ang. Geometic Objects (geom))\n\nObiekt geometryczny (geom) to symbol jaki wyświetlamy na wykresie: Np:\n\n-   punkty (geom_points)\n-   linie (geom_line)\n-   określony typ wykresu: geom_boxplot, geom_histogram\n\nKażdy wykres musi mieć określony przynajmniej jeden obiekt geometryczny. Nie ma jednak górnej granicy. Używając znak + można dodawać dowolną ilość obiektów.\n\nDostępne typy obiektów: `help.search(“geom_”, package = “ggplot2”)`\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(ggplot2)\ndf = data.frame(zmiennaA = c(1:10), \n                zmiennaB = c(3:12),\n                grp = c(rep(c(\"A\", \"B\"), 5)))\n\nggplot(df, aes(x = zmiennaA, y = zmiennaB, color = grp)) + \n  geom_point(size=2, shape=15)\n```\n\n::: {.cell-output-display}\n![](4_wizualizacja_files/figure-html/unnamed-chunk-1-1.png){width=672}\n:::\n:::\n",
+    "supporting": [
+      "4_wizualizacja_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

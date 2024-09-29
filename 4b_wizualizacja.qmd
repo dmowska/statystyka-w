@@ -1,0 +1,330 @@
+# Formatowanie wykresów
+
+```{r}
+library(ggplot2)
+```
+
+```{r}
+data("gapminder", package = "gapminder")
+dane2007 <- subset(gapminder, year==2007)
+```
+
+Elementy formatowania wykresów:
+
+-   etykiety osi
+-   tytuł wykresu
+-   zmiana koloru, kształtu oraz wielkości punktów,
+-   zmiana koloru, typu oraz grubości linii,
+
+## Zmiana koloru, kształtu oraz wielkości punktów
+
+W R sposób wyświetlania punktu (kształt) kodowany jest za pomoca numeru.
+
+![](figures/5_points-symbols.png){width="220"}
+
+```{r}
+ggplot(data=dane2007, aes(x=gdpPercap, y=lifeExp)) +
+  geom_point(size = 3, color = "red", shape = 15)
+```
+
+> Wyświetl wykres zależności zmiennych lifeExp od gdpPercap używając kształtu wypełnionego trójkąta o kolorze zielonym i wielkości 2. 
+
+## Zmiana koloru oraz grubości linii 
+
+```{r}
+ggplot(data = gapminder, aes(x = year, y = lifeExp)) + 
+  stat_summary(fun = "mean", geom = "line", 
+               color = "orange", lwd = 2, linetype = "dotted" )
+```
+
+> Zmień kolor linii na zielony, typ: linia kreskowa, grubość: 3
+
+## Modyfikacjia wykresu względem wartości zmiennej
+
+Wykresy mogą być modyfikowane na podstawie wartości zmiennej. W tym celu można posłużyć się atrybutami:
+
+-   kolor (*color*)
+-   kształt (*shape*)
+-   wielkość (*size*)
+
+```{r}
+ggplot(data=dane2007, aes(x=gdpPercap, y=lifeExp, shape = continent)) + 
+  geom_point()
+```
+
+
+```{r}
+ggplot(data=dane2007, aes(x=gdpPercap, y=lifeExp, color = continent)) + 
+  geom_point()
+```
+
+```{r}
+ggplot(data=dane2007, aes(x=gdpPercap, y=lifeExp, color = pop)) + 
+  geom_point()
+```
+
+
+```{r}
+ggplot(data=dane2007, aes(x=gdpPercap, y=lifeExp, size = pop)) + geom_point()
+```
+
+
+## Tytuł wykresu 
+
+Tytuł wykresu można dodać używając *ggtitle* lub argumentu *title* wewnątrz *labs*
+
+```{r}
+#| eval: false
+ggplot(data=dane2007, aes(x=gdpPercap, y=lifeExp)) +
+  geom_point() + 
+  labs(x = "PKB na osobę (USD)", 
+       y = "Oczekiwana dalsza długość trwania życia") + 
+  ggtitle("Zależność między oczekiwaną długością trwania życia, a PKB w 2007 roku")
+```
+
+
+```{r}
+ggplot(data=dane2007, aes(x=gdpPercap, y=lifeExp)) +
+  geom_point() + 
+  labs(x = "PKB na osobę (USD)", 
+       y = "Oczekiwana dalsza długość trwania życia", 
+       title = "Zależność między oczekiwaną długością trwania życia, a PKB w 2007 roku")
+```
+
+
+## Formatowanie osi 
+
+### Etykiety osi 
+
+Argument *labs* pozwala na dodanie do wykresów etykiet osi oraz tytułu.
+
+```{r}
+ggplot(data=dane2007, aes(x=gdpPercap, y=lifeExp)) +
+  geom_point() + 
+  labs(x = "PKB na osobę (USD)", y = "Oczekiwana dalsza długość trwania życia")
+```
+
+### Zakres 
+
+```{r}
+#| message: false 
+#| warning: false
+ggplot(data=dane2007, aes(x=gdpPercap, y=lifeExp)) +
+  geom_point() + 
+  labs(x = "PKB na osobę (USD)", y = "Oczekiwana dalsza długość trwania życia") + 
+  lims(x = c(0, 10000))
+```
+
+### Skale 
+
+```{r}
+ggplot(data=dane2007, aes(x=gdpPercap, y=lifeExp)) +
+  geom_point() + 
+  scale_x_continuous(name = "PKB na osobę w USD", 
+                     breaks = seq(0, 50000, 5000)) + 
+  scale_y_continuous(name = "Oczekiwana długość trwania życia", 
+                     limits = c(0, 100),
+                     breaks = seq(0, 100, 20))
+```
+
+```{r}
+ggplot(data=dane2007, aes(x = continent, y = lifeExp)) +
+  geom_boxplot() + 
+  labs(x = "Oczekiwana długość trwania życia") + 
+  scale_x_discrete(name = "Kontynenty", 
+                   labels = c(
+                     "Africa" = "Afryka", 
+                     "Americas" = "Ameryka Płn. i Płd.", 
+                     "Asia" = "Azja", 
+                     "Europe" = "Europa", 
+                     "Oceania" = "Australia i Oceania"))
+```
+
+### Skala logarytmiczna
+
+```{r}
+ggplot(data = dane2007, aes(x = pop, y = lifeExp)) +
+  geom_point() +
+  labs(x = "Liczba ludności", y = "Oczekiwana długość trwania życia") + 
+  scale_x_log10()
+```
+
+### Odwrócenie osi 
+
+```{r}
+ggplot(data = dane2007, aes(x = continent)) +
+  geom_bar() +
+  coord_flip()
+```
+
+### Sortowanie 
+
+```{r}
+library(forcats)
+ggplot(data =dane2007, aes(x = fct_infreq(continent))) +
+  geom_bar()
+```
+
+```{r}
+ggplot(data = dane2007, aes(x = fct_reorder(continent, lifeExp, median), y = lifeExp)) +
+  geom_boxplot()
+```
+
+> Dodaj tytuł oraz podpisy osi do powyższych wykresów. 
+
+## Skale kolorystyczne
+
+### Skale kolorystyczne dla zmiennej jakościowej
+
+Więcej: https://sjspielman.github.io/introverse/articles/color_fill_scales.html
+
+- `scale_color_manual` oraz `scale_fill_manual` pozwala na samodzielne zdefiniowanie kolorów. Można także przypisać wektor z nazwami kategorii - wtedy kolor zostanie przypisany do danej kategorii.
+
+```{r}
+ggplot(data=dane2007, aes(x=gdpPercap, y=lifeExp, color = continent)) +
+  geom_point() + 
+  labs(x = "PKB na osobę (USD)", y = "Oczekiwana dalsza długość trwania życia") + 
+  scale_color_manual(values = c("orange", "darkgreen", "lightgreen","blue", "purple"))
+```
+
+```{r}
+ggplot(data=dane2007, aes(x=gdpPercap, y=lifeExp, color = continent)) +
+  geom_point() + 
+  labs(x = "PKB na osobę (USD)", y = "Oczekiwana dalsza długość trwania życia") + 
+  scale_color_manual(values = c("Africa" = "orange", 
+                                "Americas" = "red",
+                                "Asia" = "blue",
+                                "Europe" = "purple",
+                                "Oceania" = "green"))
+```
+
+
+```{r}
+ggplot(data=dane2007, aes(x = continent, y = lifeExp, fill = continent)) +
+  geom_boxplot() + 
+  labs(x = "Oczekiwana długość trwania życia") + 
+  scale_fill_manual(values = c("blue", "orange", "magenta", "yellow", "green"))
+```
+
+- `scale_color_brewer` oraz `scale_fill_brewer` z pakietu `RColorBrewer` pozwala na zdefiniowanie jednej z palet dostarczanych przez pakier `RColorBrewer. Dostępne palety w pakiecie `RColorBrewer`. 
+
+```{r}
+#| eval: false
+RColorBrewer::display.brewer.all()
+```
+
+
+```{r}
+library(RColorBrewer)
+ggplot(data=dane2007, aes(x=gdpPercap, y=lifeExp, color = continent)) +
+  geom_point() + 
+  labs(x = "PKB na osobę (USD)", y = "Oczekiwana dalsza długość trwania życia") + 
+  scale_color_brewer(palette = "Set1")
+```
+
+
+```{r}
+ggplot(data=dane2007, aes(x = continent, y = lifeExp, fill = continent)) +
+  geom_boxplot() + 
+  labs(x = "Oczekiwana długość trwania życia") + 
+  scale_fill_brewer(palette = "Set1")
+```
+
+```{r}
+ggplot(data=dane2007, aes(x = continent, y = lifeExp, fill = continent)) +
+  geom_boxplot() + 
+  labs(x = "Oczekiwana długość trwania życia") + 
+  scale_fill_brewer(palette = "YlGn", direction = -1)
+```
+
+- `scale_color_discrete_qualitative` oraz `scale_fill_discrete_qualitative` z pakietu `colorspace`
+(https://colorspace.r-forge.r-project.org/articles/ggplot2_color_scales.html) 
+
+```{r}
+library(colorspace)
+ggplot(data = dane2007, aes(x = gdpPercap, y = lifeExp, color = continent)) +
+  geom_point() +
+  scale_color_discrete_qualitative(palette = "Dynamic")
+```
+
+
+```{r}
+ggplot(data=dane2007, aes(x = continent, y = lifeExp, fill = continent)) +
+  geom_boxplot() + 
+  labs(x = "Oczekiwana długość trwania życia") + 
+  scale_fill_discrete_qualitative(palette = "Harmonic")
+```
+
+> Wykonaj wykres pudełkowy dla zmiennej gdpPercap względem lat. Pokoloruj pudełka, podpisz osie oraz dodaj tytuł do wykresu. 
+
+### Skale kolorystyczne dla zmiennej ilościowej
+
+- `scale_colour_gradient`
+
+```{r}
+ggplot(data=dane2007, aes(x=gdpPercap, y=lifeExp, color = pop)) +
+  geom_point() + 
+  labs(x = "PKB na osobę (USD)", y = "Oczekiwana dalsza długość trwania życia", color = "Kontynent") + 
+  scale_colour_gradient(low = "orange", high = "brown")
+```
+
+-  `scale_color_continuous_sequential` z pakietu `colorspace`
+
+```{r}
+ggplot(data=dane2007, aes(x=gdpPercap, y=lifeExp, color = pop)) +
+  geom_point() + 
+  labs(x = "PKB na osobę (USD)", y = "Oczekiwana dalsza długość trwania życia") + 
+   scale_color_continuous_sequential(palette = "YlOrRd")
+```
+
+```{r}
+ggplot(data =dane2007, aes(x = gdpPercap, y = lifeExp, color = pop)) +
+  geom_point() +
+    labs(x = "PKB na osobę (USD)", y = "Oczekiwana dalsza długość trwania życia", color = "Liczba ludności") + 
+  scale_color_continuous_sequential(trans = "log10", labels = scales::label_comma(), palette = "YlOrRd")
+```
+
+> Wykonaj wykres ilustrujący zależność między PKB na osobę, a długością trwania życia. Pokoloruj punkty względem zmienej pop. Użyj dowolnej palety. 
+
+## Tekst na wykresach 
+
+```{r}
+ggplot(data = dane2007, aes(x = gdpPercap, y = lifeExp, color = continent)) +
+  geom_point() +
+  geom_text(aes(label = country), check_overlap = TRUE)
+```
+
+```{r}
+library(ggrepel)
+ggplot(data = dane2007, aes(x = gdpPercap, y = lifeExp, color = continent)) +
+  geom_point() +
+  geom_text_repel(aes(label = country), max.overlaps = 3)
+```
+
+## Motywy
+
+Motywy (ang. *theme*) pozwalają na modyfikację i dostosowanie komponentów wykresów, takich jak tytuł, etykiety, tło, wielkość czcionki, położenie legendy itd. Istnieją wbudowane rozwiązania, np. `theme_bw()`, `theme_classic()`, `theme_light()`, `theme_minimal()`. Można także użyć funkcji `theme()` i dowolnie zmodyfikować każdy element. 
+
+```{r}
+ggplot(data=dane2007, aes(x=gdpPercap, y=lifeExp, color = continent)) +
+  geom_point() + 
+  labs(x = "PKB na osobę w USD", y = "Oczekiwana długość trwania życia", 
+       title = "Zależność między oczekiwaną długością trwania życia\na PKB na osobę w 2007 roku") + 
+  theme_bw()
+```
+
+```{r}
+#| warning: false
+#| message: false
+ggplot(data=dane2007, aes(x=gdpPercap, y=lifeExp, color = continent)) +
+  geom_point() + 
+  labs(x = "PKB na osobę w USD", y = "Oczekiwana długość trwania życia", labs = "Kontynent", 
+       title = "Zależność między oczekiwaną długością trwania życia\na PKB na osobę w 2007 roku") + 
+  scale_color_brewer(name = "Kontynent", palette = "Set1", 
+                     labels = c("Africa" = "Afryka", "Americas" = "Ameryka N/S", "Asia" = "Azja", "Europe" = "Europa", "Oceania" = "Australia i Oceania")) + 
+  theme_bw() + 
+  theme(base_size = 13, 
+        legend.position = "bottom", 
+        legend.title = element_text(face = "bold"))
+```
+

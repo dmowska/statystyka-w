@@ -1,0 +1,14 @@
+{
+  "hash": "ce23c522248cb257dfff69d3ecf7b553",
+  "result": {
+    "markdown": "# Wprowadzenie do pracy w R\n\n## Katalog roboczy\n\n***Zawsze rozpocznij pracę od ustawienia ścieżki do folder roboczego.***\n\n\n::: {.cell}\n\n```{.r .cell-code}\n#ustawienie ścieżki do katalogu roboczego\nsetwd(\"statystyka_wizualizacja/cwiczenie_1\")\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\n#sprawdzanie ścieżki do katalogu \ngetwd()\n```\n:::\n\n\n## Otwieranie i zapisywanie plików tekstowych\n\n\n::: {.cell}\n\n```{.r .cell-code}\n#Otwieranie danych z pliku csv\ndane <- read.csv('dane/dane.csv')\n\n#otwieranie danych z pliku txt - wymaga określenia separatora\ndane2 <- read.table('dane/dane.txt', sep = \" \")\n```\n:::\n\n\nDane w pliku dostępnym tylko w R\n\n\n::: {.cell}\n\n```{.r .cell-code}\naustrialia <- readRDS(\"dane/dane.rds\")\n```\n:::\n\n\nOtwieranie środowiska pracy (przydatne, gdy chcemy wczytać kilka obiektów do R)\n\n\n::: {.cell}\n\n```{.r .cell-code}\nload(\"dane/cw1.rda\")\n```\n:::\n\n\n## Dane zawarte w pakietach\n\n\n::: {.cell}\n\n```{.r .cell-code}\ndata(\"gapminder\", package = \"gapminder\")\n```\n:::\n\n\n## Zapisywanie wyników pracy\n\n### Zapisywanie pojedyńczego obiektu (np. ramki danych)\n\nPlik tekstowy może być otworzony w dowolnym oprogramowaniu\n\n\n::: {.cell}\n\n```{.r .cell-code}\nwrite.csv(australia, \"out/australia.csv\")\n```\n:::\n\n\n### Zapisywanie wyników pracy w formacie dostępnym tylko w R\n\nPojedyńczy obiekt\n\n\n::: {.cell}\n\n```{.r .cell-code}\nsaveRDS(dane, \"out/dane.rds\")\n```\n:::\n\n\nZapisywanie wybranych obiektów ze środowiska pracy R\n\n\n::: {.cell}\n\n```{.r .cell-code}\nsave(dane, australia, file = \"out/cw1a.rda\")\n```\n:::\n\n\nZapisywanie wszystkich obiektów znajdujących się w środowisku pracy R\n\n\n::: {.cell}\n\n```{.r .cell-code}\nsave.image(\"out/cw1b.RData\")\n```\n:::\n\n\n## Pomoc\n\n\n::: {.cell}\n\n```{.r .cell-code}\n?nazwaFunkcji\nhelp(nazwaFunkcji)\nexample(nazwaFunkcji)\nargs(nazwaFunkcji)\n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

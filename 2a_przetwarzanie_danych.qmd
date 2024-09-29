@@ -1,0 +1,156 @@
+# Przetwarzanie danych w R 
+
+```{r}
+#| label: wczytanie-danych
+#| include: false
+data('gapminder', package = 'gapminder')
+```
+
+## Wstępna eksploracja danych 
+
+```{r}
+#| eval: false
+str(gapminder)
+
+#wyświetlanie początkowych wierszy, argument n definiuje ile wierszy ma być wyświetlonych (domyślnie 5)
+head(gapminder)
+head(gapminder, n = 2)
+
+#wyświetlanie n ostatnich wierszy, argument n definiuje ile wierszy ma być wyświetlonych (domyślnie 5)
+tail(gapminder)
+
+#wyświetlanie nazw zmiennych, nazw kolumn oraz nazw wierszy
+names(gapminder)
+colnames(gapminder)
+rownames(gapminder)
+
+#liczba kolumn
+ncol(gapminder)
+
+#liczba wierszy
+nrow(gapminder)
+
+#wyświetlanie unikalnych wartości 
+unique(gapminder$continent)
+
+#typ/klasa zmiennej
+class(gapminder$continent)
+
+#Liczność poszczególnych kategorii 
+table(gapminder$continent) 
+
+#Podstawowe statystyki zbioru danych
+summary(gapminder)
+
+#Podstawowe statystyki zmiennej lifeExp (oczekiwana długość życia)
+summary(gapminder$lifeExp)
+```
+
+> Uwaga! W ten sposób zaznaczane będą w tekście zadania do wykonania odnoszące się do omówionego powyżej fragmentu materiału. 
+
+> Wczytaj do R zbiór danych z pliku `dane.csv` oraz przypisz go do obiektu o nazwie `dane`. 
+
+> Wyświetl 4 ostatnie wiersze zbioru danych `dane`. 
+
+> Używając zbioru danych `dane`, wyświetl unikalne wartości dla kolumny `country`
+
+> Wyświetl podstawowe statystyki zbioru danych `dane`. 
+
+## Indeksowanie
+
+### wektory
+
+W R pierwszy element wektora indeksowany jest jako 1.
+
+```{r}
+#| label: indeks-wektor
+#| eval: false
+v <- c(a = 1, b = 2, c = 3, d = 4, e = 5)
+v
+v[1]
+v[-1]
+v[1:3]
+v[v>4]
+v['a']
+```
+
+### data.frame
+
+Indeksowanie ramki danych ma postać: obiekt\[wiersz, kolumna\].
+
+Wybór jednej zmiennej wykonywany jest za pomocą operatora '\$' (np. gapminder$continent)
+
+```{r}
+#| label: indeks-df
+#| eval: false
+gapminder[1,]
+gapminder[,1]
+gapminder[3, 4]
+gapminder[, -1]
+gapminder[, c(2,3)]
+gapminder[gapminder$year == 1952, ]
+gapminder[gapminder$year == 1952 & gapminder$continent=='Asia',]
+gapminder[gapminder$year == 1952, c(5)]
+gapminder[gapminder$pop > 10000000, ]
+gapminder[gapminder$continent != 'Asia',]
+gapminder[gapminder$continent %in% c('Asia', 'Africa'),]
+```
+
+> Używając indeksowania wybierz ze zbioru danych gapminder: 1) dane dla kontynentu Europa; 2) dane dla kontynentu Azja (Asia); ogranicz wybór tylko do kolumn pop oraz lifeExp. 3) obserwacje, dla których oczekiwana długość trwania życia przekroczyła 75 lat; 4) dane dla lat 1952 oraz 2007.
+
+
+## Selekcja oraz tworzenie nowej zmiennej
+
+### Indeksowanie
+```{r, eval=FALSE}
+gapminder[1,]
+gapminder[,1]
+```
+
+### Selekcja danych o określonej wartości 
+```{r, eval=FALSE}
+gapminder[gapminder$year == 1952, ]
+gapminder[gapminder$year == 1952 & gapminder$continent == 'Asia',]
+gapminder[gapminder$year == 1952, c(5)]
+gapminder[gapminder$pop > 10000000, ]
+```
+
+### Funkcja `subset()`
+
+```{r, eval=FALSE}
+dane_sel <- subset(gapminder, continent == "Europe" & year == 1952, select = c(country, pop))
+dane_selection <- subset(gapminder, continent == "Europe" & year == 1952, select = c(country:pop))
+```
+
+> Ze zbioru danych `dane` wybierz dane dla państwa Australia. 
+
+> W jakich latach w Australii długość trwania życia wynosiła powyżej 75 lat? 
+
+### Tworzenie nowej zmiennej 
+```{r, eval=FALSE}
+dane1952 <- gapminder[gapminder$year == 1952, ]
+```
+
+```{r, eval=FALSE}
+gapminder$pop_mln <- gapminder$pop / 1000000
+head(gapminder, 3)
+```
+
+### Porządkowanie 
+
+```{r, eval=FALSE}
+dane_2 <- gapminder[order(gapminder$year), ]
+
+#sortowanie względemm dwóch zmiennych
+dane_2 <- gapminder[order(gapminder$continent, gapminder$country), ]
+head(dane_2)
+
+#sortowanie według kraju (rosnąco) oraz roku (malejąco)
+dane_2 <- gapminder[order(gapminder$country, -gapminder$year),]
+head(dane_2)
+
+```
+
+> Ze zbioru danych `dane` wyselekcjonować dane dla Nowej Zelandii (New Zealand) oraz posortować je według długości trwania życia (od największej do najmniejszej)
+
+> W którym roku liczba ludności Nowej Zelandii przekroczyła 3 miliony? 

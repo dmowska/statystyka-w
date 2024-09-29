@@ -1,0 +1,71 @@
+{
+  "index.qmd": {
+    "index.html": "62f4389e"
+  },
+  "1a_wprowadzenie.qmd": {
+    "1a_wprowadzenie.html": "221f28ad"
+  },
+  "1b_wprowadzenie_do_r.qmd": {
+    "1b_wprowadzenie_do_r.html": "b06c9809"
+  },
+  "2a_przetwarzanie_danych.qmd": {
+    "2a_przetwarzanie_danych.html": "0146e949"
+  },
+  "2b_przetwarzanie_danych_dplyr.qmd": {
+    "2b_przetwarzanie_danych_dplyr.html": "6ad9b584"
+  },
+  "3_statystyki_opisowe.qmd": {
+    "3_statystyki_opisowe.html": "d1c543a2"
+  },
+  "4_wizualizacja.qmd": {
+    "4_wizualizacja.html": "ac47fc15"
+  },
+  "4a_wizualizacja.qmd": {
+    "4a_wizualizacja.html": "6c93dc0e"
+  },
+  "4b_wizualizacja.qmd": {
+    "4b_wizualizacja.html": "459a2cc6"
+  },
+  "5_rozklady.qmd": {
+    "5_rozklady.html": "8e46fa06"
+  },
+  "6_wnioskowanie.qmd": {
+    "6_wnioskowanie.html": "0c570e25"
+  },
+  "6a_wnioskowanie.qmd": {
+    "6a_wnioskowanie.html": "2d2571e8"
+  },
+  "6b_wnioskowanie.qmd": {
+    "6b_wnioskowanie.html": "6efc451a"
+  },
+  "7_testy.qmd": {
+    "7_testy.html": "c41246f0"
+  },
+  "8_testy_parametryczne.qmd": {
+    "8_testy_parametryczne.html": "356667ea"
+  },
+  "9_testy_nieparametryczne.qmd": {
+    "9_testy_nieparametryczne.html": "1d7e365d"
+  },
+  "10_testy_wiele_grup.qmd": {
+    "10_testy_wiele_grup.html": "c2197f14"
+  },
+  "11_testowanie_istotnosci_proporcji.qmd": {
+    "11_testowanie_istotnosci_proporcji.html": "df4feeb8"
+  },
+  "12_analiza_korelacji.qmd": {
+    "12_analiza_korelacji.html": "f630ce23"
+  },
+  "13_analiza_regresji.qmd": {
+    "13_analiza_regresji.html": "6f19372b"
+  },
+  "14_Raport_statystyczny.qmd": {
+    "14_Raport_statystyczny.html": "98543136"
+  },
+  "15_Raport_przyklad.qmd": {
+    "15_Raport_przyklad.html": "25e6438d"
+  },
+  "16_zadania_samodzielne.qmd": {
+    "16_zadania_samodzielne.html": "6722fa48"
+  }
+}

@@ -1,0 +1,307 @@
+# Statystyki opisowe
+
+Statystyki opisowe wykorzystuje się do przedstawienia ogólnej charakterystyki danych.
+
+Statystyki opisowe dzielimy na:
+
+1.  **Miary położenia** - określają przeciętny poziom oraz rozmieszczenie wartości zmiennej:
+
+    -   *Miary przeciętne* - np. *średnia arytemtyczna* - charakteryzują średni lub typowy poziom wartości zmiennej; mówią zatem o *przeciętnym* poziomie rozważanej zmiennej;
+    -   *Wartość modalna* - wartość najczęściej występująca w zbiorze danych;
+    -   *Kwantyle* - dzielą zbiorowość na określone części, np. 4, 10, 100 części.
+
+2.  **Miary rozrzutu** - określają granice zmienności danej zmiennej:
+
+    -   *rozstęp;*
+    -   *rozstęp kwartylowy;*
+    -   *odchylenie standardowe.*
+
+3.  **Miary asymetrii i koncentracji**.
+
+    -   *skośność;*
+    -   *kurtoza.*
+
+![](figures/3_stat_opis.png){width="500"}
+
+```{r}
+#| message: false
+#| warning: false
+library(gapminder)
+library(dplyr)
+```
+
+```{r}
+data('gapminder', package ='gapminder')
+dane2007 <- filter(gapminder, year==2007)
+```
+
+## Podstawowe statystyki
+
+Zestaw podstawowych statystyk opisowych obliczany jest za pomocą funkcji `summary()`. Funkcja ta oblicza wartość minimalną, wartość maksymalną, pierwszy i trzeci kwartyl, medianę oraz średnią.
+
+```{r}
+summary(dane2007)
+```
+
+## Statystyki opisowe: Miary położenia
+
+### Średnia arytmetyczna
+
+-   Obliczana jest jako iloraz sumy liczb i ilości tych liczb.
+-   Jest najczęściej używaną miarą charakteryzującą rozkład cechy
+-   Wady: czuła na wartości odstające
+
+```{r}
+srednia_lifeExp <- mean(dane2007$lifeExp)
+srednia_lifeExp 
+```
+
+> Obliczyć średnią wartość dla PKP (gdpPercap) w 2007 roku.
+
+### Średnia ważona
+
+```{r}
+srednia_w_lifeExp <- weighted.mean(dane2007$lifeExp, dane2007$pop)
+```
+
+### Średnia harmoniczna
+
+```{r}
+harmonic_mean = function(x){
+  1 / mean(1 / x)
+}
+```
+
+```{r}
+rzeka = c(6, 3.2) #km/h
+harmonic_mean(rzeka)
+```
+
+### Średnia geometryczna
+
+```{r}
+geometric_mean = function(x){
+  n = length(x)
+  prod(x) ^ (1 / n)
+}
+```
+
+```{r}
+zmiana <- c(1.026392, 1.011959)
+geometric_mean(zmiana)
+```
+
+### Kwantyle
+
+Kwantyle to wartości cechy, które dzielą analizowany zbiór danych na określone części pod względem liczby jednostek. Części te pozostają w stosunku do siebie w określonych proporcjach:
+
+-   Kwartyle - podział na 4 części:
+    -   Kwartyl pierwszy (Q1)
+    -   Mediana - kwartyl drugi
+    -   Kwartyl trzeci (Q3)
+-   Decyle - podzial na 10 części
+-   Percentyle - podział na 100 częsci
+
+Funkcja `quantile()` oblicza dowolną wartość kwantyli. Argument *probs* pozwala na zdefyniowanie dowolnych wartości, które mają zostać wyliczone. Argument ten przyjmuje wartości z przedziału od 0 do 1.
+
+![](figures/3_stat_kwartyle.png){width="500"}
+
+#### Kwartyle
+
+Funkcja `quantile()` domyślnie zwraca wartośći kwartyli.
+
+```{r}
+kwartyle <- quantile(dane2007$lifeExp)
+kwartyle
+```
+
+Kwartyle są także obliczane przez funkcję `summary()`, która dodatkowo zwraca także wartości minimalną, maksymalną oraz średnią.
+
+#### Decyle
+
+W poniższym przykładzie *seq(0,1,0.1)* zwraca sekwencję wartości od 0 do 1 z krokiem co 0.1. Odpowiada to podziałowi danych na 10 równych części.
+
+```{r}
+decyle <- quantile(dane2007$lifeExp, probs = seq(0, 1, 0.1))
+decyle
+```
+
+#### Percentyle
+
+W poniższym przykładzie zbiór zostanie podzielony na 100 równych części.
+
+```{r}
+percentyle <- quantile(dane2007$lifeExp, probs = seq(0, 1, 0.01))
+head(percentyle, 10)
+```
+
+#### Dowolne wartości kwantyli
+
+W poniższym przykładzie zostanie wyliczony 5 oraz 95 percentyl.
+
+```{r}
+q <- quantile(dane2007$lifeExp, probs = c(0.05, 0.95))
+q
+```
+
+> Obliczyć pierwszy, trzeci kwartyl oraz decyle dla gdpPercap.
+
+#### Mediana
+
+Mediana to wartość, która dzieli zbiór danych na 2 równe części. Mediana obliczana jest przez funkcję `median()`.
+
+```{r}
+median_lifeExp <- median(dane2007$lifeExp)
+median_lifeExp 
+```
+
+> Obliczyć medianę dla gdpPercap.
+
+**Mediana a średnia arytmetyczna**
+
+-   dla rozkładu symetrycznego mediana oraz średnia będą równe.
+-   mediana jest lepszą miarą w przypadku rozkładów skośnych.
+-   średnia jest bardziej czuła na wartości odstające.
+-   średnia jest bardziej przydatna dla małych zbiorów danych.
+
+Podsumowanie: Warto podawać obie wartości.
+
+### Wartość modalna
+
+-   wartość cechy, która w zbiorze danych występuje najczęściej. W R nie ma wbudowanej funkcji do obliczania tej statystyki.
+
+## Statystyki opisowe: Miary rozrzutu
+
+### Minimum i maksimum
+
+```{r}
+min_lifeExp <- min(dane2007$lifeExp)
+min_lifeExp
+
+max_lifeExp <- max(dane2007$lifeExp)
+max_lifeExp
+```
+
+```{r}
+range(dane2007$lifeExp)
+```
+
+### Rozstęp
+
+-   najprostsza miara zmienności
+-   różnica między wartości maksymalną oraz wartością minimalną
+-   wrażliwy na wartości odstające
+
+```{r}
+range_lifeExp <- max(dane2007$lifeExp) - min(dane2007$lifeExp)
+```
+
+Uwaga! W R funkcja `range()` zwraca wektor składający się z dwóch wartości - minimalnej oraz maksymalnej, a nie rostęp (różnicę między tymi wartościami).
+
+> Obliczyć rozstęp dla gdpPercap
+
+### Rozstęp kwartylowy
+
+-   różnica między kwartylem trzecim i kwartylem pierwszym
+
+```{r}
+IQR_lifeExp <- IQR(dane2007$lifeExp)
+```
+
+> Obliczyć rozstęp kwartylowy dla gdpPercap.
+
+### Wariancja
+
+-   wariancja oraz odchylenie standardowe mierzą jak daleko dane rozchodzą się od średniej.
+
+```{r}
+var_lifeExp <- var(dane2007$lifeExp)
+```
+
+### Odchylenie standardowe
+
+-   obliczane jako pierwiastek z wariancji
+
+-   obok średniej jest jednym z najczęściej stosowanych parametrów statystycznych:
+
+    -   jest obliczane ze wszystkich obserwacji w zbiorze danych
+    -   im zbiór danych jest bardziej zróżnicowany tym większe odchylenie standardowe.
+
+-   małe odchylenie standardowe - wartości są blisko średniej
+
+-   duże odchylenie standardowe - wartości są daleko od średniej.
+
+```{r}
+sd_lifeExp <- sd(dane2007$lifeExp)
+sd_lifeExp 
+```
+
+> Jakie jest odchylenie standardowe dla gdpPercap?
+
+## Opisywanie danych nominalnych
+
+### Częstość
+
+```{r}
+table(dane2007$continent)
+```
+
+```{r}
+table(dane2007$continent) / length(dane2007$continent) * 100
+```
+
+## Statystykiw grupach
+
+Pakiet `dplyr` pozwala także na obliczenie statystyk według grup, np. średnia długość trwania życia na poszczególnych kontynentach.
+
+-   Średnia oczekiwana długość życia w 2007 roku według kontynentów.
+
+Obliczenie statystyk w grupach wymaga najpierw pogrupowania danych (funkcja `group_by()`).
+
+```{r}
+gapminder2007 <- filter(gapminder, year == 2007)
+by_continent <- group_by(gapminder2007, continent)
+smr_by_continent <- summarize(by_continent,
+                              mean_le = mean(lifeExp))
+
+smr_by_continent
+```
+
+Powyższy kod można zapisać także z wykorzystaniem operatora łączącego %\>%
+
+```{r}
+mean_by_continent <- gapminder %>% 
+  filter(year == 2007) %>% 
+  group_by(continent) %>% 
+  summarize(mean_le = mean(lifeExp))
+
+mean_by_continent
+```
+
+> Oblicz średnią oczekiwaną długość trwania życia w poszczególnych latach.
+
+-   **Średnia oczekiwana długość życia w podziale na kontynenty oraz lata.**
+
+```{r}
+by_continent_year <- group_by(gapminder, continent, year)
+smr_by_continent_year <- summarize(by_continent_year,
+                              mean_le = mean(lifeExp))
+
+smr_by_continent_year
+```
+
+> Oblicz średnią wartość gdpPercap w 2007 roku w podziale na kontynenty.
+
+> Oblicz średnią wartość gdpPercap w podziale na poszczególne kontynenty oraz lata. Przedstaw wynik w "układzie szerokim" - każdy wiersz to określony kontynent, a każda kolumna to określony rok.
+
+## Braki danych
+
+W R braki danych zazwyczaj kodowane są jako NA - Not Available.
+
+```{r}
+NA + 1 
+2*NA 
+x = c(1,2,NA)
+mean(x)
+mean(x, na.rm = TRUE)
+```
